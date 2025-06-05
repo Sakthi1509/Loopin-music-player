@@ -14,7 +14,7 @@ app.use(bodyParser.json());
 app.use(express.static(path.join(__dirname, "otp-auth-app")));
 
 const accountSid = "ACdbafadf7b58094ddb1a86b47e140791b";
-const authToken = "3af339fb6375e511095d51ebe59316c9";
+const authToken = "7b66dd83a3e8d95ebd1c32a61f15fa6d";
 const verifyServiceSid = "VAabe986175cea48346042662267a3a5f8";
 
 const client = twilio(accountSid, authToken);
