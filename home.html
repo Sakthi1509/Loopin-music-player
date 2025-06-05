@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Loopin - Music Player</title>
+  <link rel="stylesheet" href="style.css" />
+  <!-- Bootstrap CSS -->
+
+  <!-- Bootstrap Icons -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet" />
+  <link rel="icon" type="image/png" href="headphone.png">
+</head>
+
+<body>
+  <header class="navbar">
+    <div class="logo">
+      <img src="1748801346365.png" alt="Loopin Logo" class="logo-img" />
+    </div>
+    <div class="search-container">
+      <input type="text" placeholder="Search songs..." class="search-bar" autocomplete="off" />
+      <div class="search-dropdown"></div>
+    </div>
+
+  </header>
+  <h3 class="text-white mt-4">Trending PoP <div style="display: flex; justify-content: flex-end;">
+      <a href="showall.html?genre=pop" class="show-all-btn">Show All →</a>
+    </div>
+
+  </h3>
+  <div class="scroll-container" data-genre="pop"></div>
+  </h3>
+
+  <h3 class="text-white mt-4">Chill Vibes <div style="display: flex; justify-content: flex-end;">
+      <a href="showall.html?genre=chill" class="show-all-btn">Show All →</a>
+    </div>
+
+  </h3>
+  <div class="scroll-container" data-genre="chill"></div>
+
+
+
+  <h3 class="text-white mt-4">Romantic Picks <div style="display: flex; justify-content: flex-end;">
+      <a href="showall.html?genre=romantic" class="show-all-btn">Show All →</a>
+    </div>
+
+  </h3>
+  <div class="scroll-container" data-genre="romantic"></div>
+
+
+  
+  <h3 class="text-white mt-4">Feeling Sad<div style="display: flex; justify-content: flex-end;">
+      <a href="showall.html?genre=sad" class="show-all-btn">Show All →</a>
+    </div>
+  </h3>
+  <div class="scroll-container" data-genre="sad"></div>
+
+<h3 class="text-white mt-4">Emotions<div style="display: flex; justify-content: flex-end;">
+  <a href="showall.html?genre=emotional" class="show-all-btn">Show All →</a>
+</div>
+</h3>
+<div class="scroll-container" data-genre="emotional"></div>
+
+
+<h3 class="text-white mt-4">acoustic<div style="display: flex; justify-content: flex-end;">
+  <a href="showall.html?acoustic" class="show-all-btn">Show All →</a>
+</div>
+</h3>
+<div class="scroll-container" data-genre="acoustic"></div>
+
+
+  <!-- Playlist Container -->
+  <div class="mt-3" id="moodPlaylistContainer" style="max-height: 300px; overflow-y: auto;">
+    <!-- Tracks will be shown here -->
+  </div>
+
+<br><br><br><br><br><br><br><br>
+  <footer class="player-bar">
+
+    <h5 style="text-align: center; position:absolute; left: 40%; "> @Author:sakthi34035@gmail.com</h5>
+  </footer>
+
+  <script src="script.js"></script>
+  <script src="server.js"></script>
+
+
+
+
+
+</body>
+
+</html>

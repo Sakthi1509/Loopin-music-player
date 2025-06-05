@@ -1,0 +1,472 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet" />
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <!-- Bootstrap Icons -->
+
+
+  <title>Track Details</title>
+  <link rel="stylesheet" href="style.css" />
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      margin: 0;
+      background: #121212;
+    }
+
+    .navbar {
+      background-color: #1db954;
+      padding: 1rem 2rem;
+      color: #000000;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .logo {
+      font-size: 1.5rem;
+      font-weight: bold;
+    }
+
+    .search-container {
+      position: relative;
+    }
+
+    .search-bar {
+      padding: 8px 14px;
+      border-radius: 20px;
+      border: none;
+      width: 200px;
+    }
+
+    .search-dropdown {
+      position: absolute;
+      background: rgb(8, 0, 0);
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+      top: 110%;
+      left: 0;
+      width: 100%;
+      display: none;
+      z-index: 100;
+    }
+
+    .search-dropdown div {
+      padding: 10px;
+      cursor: pointer;
+    }
+
+    .search-dropdown div:hover {
+      background-color: #2c2c2c;
+    }
+
+    .track-details {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 2rem;
+      max-width: 1000px;
+      margin: 2rem auto;
+      padding: 2rem;
+      background: rgb(0, 0, 0);
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+      border-radius: 15px;
+    }
+
+    .track-details img {
+      width: 300px;
+      height: 300px;
+      object-fit: cover;
+      border-radius: 10px;
+      flex-shrink: 0;
+    }
+
+    .track-info {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .track-info h2 {
+      margin: 0 0 0.5rem;
+      font-size: 2rem;
+      color: #a39393;
+    }
+
+    .track-info h4 {
+      margin: 0 0 1rem;
+      font-size: 1.2rem;
+      color: #a5a5a5;
+    }
+
+    .track-info p {
+      margin: 0.4rem 0;
+      font-size: 1rem;
+      color: rgb(255, 255, 255);
+    }
+
+    audio {
+      width: 100%;
+      margin-top: 1.5rem;
+    }
+
+    /* audio bar*/
+    .audio-player {
+      background-color: #1c1c1c;
+      padding: 1.5rem;
+      border-radius: 20px;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+      width: 100%;
+      max-width: 600px;
+      margin: auto;
+    }
+
+    .audio-player .btn {
+      width: 55px;
+      height: 55px;
+      font-size: 1.3rem;
+      border: none;
+      transition: transform 0.2s;
+    }
+
+    .audio-player .btn:hover {
+      transform: scale(1.1);
+    }
+
+    .audio-player .btn-primary {
+      background-color: #1db954;
+      color: white;
+    }
+
+    .audio-player .btn-secondary {
+      background-color: #333;
+      color: white;
+    }
+
+    input[type="range"] {
+      accent-color: #1db954;
+      height: 5px;
+      cursor: pointer;
+    }
+
+    #volumeControl {
+      accent-color: #1db954;
+      cursor: pointer;
+    }
+
+    #downloadBtn {
+      background-color: #1db954;
+      border: none;
+      color: white;
+      font-weight: bold;
+      padding: 6px 16px;
+      text-decoration: none;
+      transition: background 0.3s;
+    }
+
+    #downloadBtn:hover {
+      background-color: #1ed760;
+    }
+
+    .show-al-btn {
+      background: #1db954;
+      color: #ffffff;
+      position: relative;
+      right: 20%;
+      top: 100%;
+      padding: 0.6rem 1.2rem;
+      border-radius: 30px;
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 0.95rem;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 12px rgba(29, 185, 84, 0.4);
+    }
+
+    .show-al-btn:hover {
+      background: #1ed760;
+      box-shadow: 0 6px 15px rgba(29, 185, 84, 0.6);
+      transform: translateY(-2px);
+    }
+  </style>
+   <link rel="icon" type="image/png" href="headphone.png">
+
+</head>
+
+
+<body>
+  <header class="navbar">
+     <div class="logo">
+    <img src="1748801346365.png" alt="Loopin Logo" class="logo-img" />
+  </div>
+    <div class="search-container">
+      <input type="text" placeholder="Search songs..." class="search-bar" autocomplete="off" />
+      <div class="search-dropdown"></div>
+    </div>
+
+  </header>
+  <div class="section-header">
+    <h2 style="padding:2%;">Song Details</h2>
+    <a href="home.html" class="show-al-btn" style="right: 20px;">← Back</a>
+
+  </div>
+
+  <div class="track-details">
+    <img id="track-image" src="" alt="Track Art" />
+    <div class="track-info">
+      <div>
+        <h2 id="track-title">Song Title</h2>
+        <h4 id="track-artist">Artist Name</h4>
+        <p><strong>Album:</strong> <span id="track-album">Loading...</span></p>
+        <p><strong>Composer:</strong> <span id="track-composer">Loading...</span></p>
+        <p><strong>Duration:</strong> <span id="track-duration">Loading...</span></p>
+        <p><strong>Genre:</strong> <span id="track-genre">Loading...</span></p>
+      </div>
+      <!-- Audio Player -->
+      <div class="audio-player mt-4">
+        <audio id="audioPlayer" autoplay>
+          <source id="audioSource" src="" type="audio/mpeg" />
+          Your browser does not support the audio element.
+        </audio>
+
+        <!-- Progress bar and time display -->
+        <div class="d-flex align-items-center justify-content-between mt-2">
+          <small id="currentTime">0:00</small>
+          <input type="range" id="progressBar" value="0" class="form-range w-100 mx-3" min="0" step="1">
+          <small id="durationTime">0:00</small>
+        </div>
+
+        <!-- Controls -->
+        <div class="d-flex justify-content-between align-items-center mt-4 flex-wrap">
+
+          <!-- Volume Control -->
+          <div class="d-flex align-items-center gap-2">
+            <i class="bi bi-volume-up text-white"></i>
+            <input type="range" id="volumeControl" min="0" max="1" step="0.01" value="1" style="width: 100px;" />
+          </div>
+
+          <!-- Main Control Buttons -->
+          <div class="d-flex justify-content-center align-items-center gap-3">
+            <button class="btn btn-secondary rounded-circle" id="prevBtn">
+              <i class="bi bi-skip-start-fill"></i>
+            </button>
+            <button class="btn btn-primary rounded-circle" id="playPauseBtn">
+              <i class="bi bi-play-fill"></i>
+            </button>
+            <button class="btn btn-secondary rounded-circle" id="nextBtn">
+              <i class="bi bi-skip-end-fill"></i>
+            </button>
+          </div>
+
+          <!-- Download Button -->
+          <div>
+            <a id="downloadBtn" href="#" download class="btn btn-success rounded-pill">
+              <i class="bi bi-download"></i>
+            </a>
+          </div>
+        </div>
+      </div>
+
+
+
+
+
+      <script>
+        const CLIENT_ID = "cd720f7c";
+        const API_URL = `https://api.jamendo.com/v3.0/tracks/?client_id=${CLIENT_ID}&format=json&limit=20&fuzzytags=pop&include=musicinfo+stats`;
+
+        const searchBar = document.querySelector(".search-bar");
+        const searchDropdown = document.querySelector(".search-dropdown");
+        let searchTimeout;
+
+        searchBar.addEventListener("input", () => {
+          const query = searchBar.value.trim();
+          if (query.length < 2) {
+            searchDropdown.style.display = "none";
+            return;
+          }
+
+          clearTimeout(searchTimeout);
+          searchTimeout = setTimeout(() => {
+            fetchSearchResults(query);
+          }, 300);
+        });
+
+        function fetchSearchResults(query) {
+          const searchUrl = `https://api.jamendo.com/v3.0/tracks/?client_id=${CLIENT_ID}&format=json&limit=5&name=${encodeURIComponent(query)}&include=musicinfo+stats`;
+
+          fetch(searchUrl)
+            .then(res => res.json())
+            .then(data => {
+              if (!data.results.length) {
+                searchDropdown.style.display = "none";
+                return;
+              }
+
+              searchDropdown.innerHTML = "";
+              data.results.forEach(track => {
+                const item = document.createElement("div");
+                item.className = "item";
+                item.innerHTML = `
+  <div style="display: flex; align-items: center; gap: 10px;">
+    <img src="${track.album_image}" alt="${track.name}" width="40" height="40" />
+    <div>
+      <strong>${track.name}</strong><br>
+      <small>${track.artist_name}</small>
+    </div>
+  </div>
+`;
+
+                item.addEventListener("click", () => {
+                  ; // no index from search, it will auto find
+                  searchDropdown.style.display = "none";
+                  searchBar.value = "";
+                  localStorage.setItem("selectedTrack", JSON.stringify(track));
+                  window.location.href = "about.html";
+                });
+                searchDropdown.appendChild(item);
+              });
+              searchDropdown.style.display = "block";
+            });
+        }
+
+        document.addEventListener("click", (e) => {
+          if (!searchDropdown.contains(e.target) && e.target !== searchBar) {
+            searchDropdown.style.display = "none";
+          }
+        });
+
+        // Load data from localStorage
+        if (window.location.pathname.endsWith("about.html")) {
+          const track = JSON.parse(localStorage.getItem("selectedTrack"));
+
+          if (track) {
+            document.getElementById("track-image").src = track.album_image;
+            document.getElementById("track-title").textContent = track.name;
+            document.getElementById("track-artist").textContent = track.artist_name;
+            document.getElementById("track-album").textContent = track.album_name || "Unknown Album";
+            document.getElementById("track-composer").textContent = track.musicinfo?.composer || "Unknown Composer";
+            document.getElementById("audioSource").src = track.audio;
+            document.getElementById("audioPlayer").load();
+          }
+        }
+
+
+      </script>
+      <script>
+        const audio = document.getElementById("audioPlayer");
+        const audioSource = document.getElementById("audioSource");
+        const playPauseBtn = document.getElementById("playPauseBtn");
+        const prevBtn = document.getElementById("prevBtn");
+        const nextBtn = document.getElementById("nextBtn");
+        
+
+
+        let playlist = []; // filled from API
+        let currentIndex = 0;
+       
+
+        // Load playlist for next/prev functionality
+        fetch(`https://api.jamendo.com/v3.0/tracks/?client_id=${CLIENT_ID}&format=json&limit=20&fuzzytags=pop&include=musicinfo+stats`)
+          .then(res => res.json())
+          .then(data => {
+            playlist = data.results;
+          });
+
+        playPauseBtn.addEventListener("click", () => {
+          if (audio.paused) {
+            audio.play();
+            playPauseBtn.innerHTML = `<i class="bi bi-pause-fill"></i>`;
+          } else {
+            audio.pause();
+            playPauseBtn.innerHTML = `<i class="bi bi-play-fill"></i>`;
+          }
+        });
+        audio.addEventListener("ended", () => {
+  // When the current song ends, play the next one
+  currentIndex = (currentIndex + 1) % playlist.length;
+  playTrack(playlist[currentIndex], currentIndex);
+});
+
+        prevBtn.addEventListener("click", () => {
+          currentIndex = (currentIndex - 1 + playlist.length) % playlist.length;
+          playFromPlaylist(currentIndex);
+        });
+
+        nextBtn.addEventListener("click", () => {
+          currentIndex = (currentIndex + 1) % playlist.length;
+          playFromPlaylist(currentIndex);
+        });
+        audio.addEventListener("ended", () => {
+    console.log("Track ended. Playing next...");
+    currentIndex = (currentIndex + 1) % playlist.length;
+    playFromPlaylist(currentIndex);
+  });
+        function playFromPlaylist(index) {
+          const track = playlist[index];
+          audioSource.src = track.audio;
+          audio.load();
+          audio.play();
+
+          playPauseBtn.innerHTML = `<i class="bi bi-pause-fill"></i>`;
+          // Optionally update UI:
+          if (document.getElementById("track-title")) {
+            document.getElementById("track-title").textContent = track.name;
+            document.getElementById("track-artist").textContent = track.artist_name;
+            document.getElementById("track-image").src = track.album_image;
+          }
+        }
+
+        // Auto switch icon on audio events
+        audio.addEventListener("pause", () => {
+          playPauseBtn.innerHTML = `<i class="bi bi-play-fill"></i>`;
+        });
+        audio.addEventListener("play", () => {
+          playPauseBtn.innerHTML = `<i class="bi bi-pause-fill"></i>`;
+        });
+        // Volume control
+        const volumeControl = document.getElementById("volumeControl");
+        volumeControl.addEventListener("input", () => {
+          audio.volume = volumeControl.value;
+        });
+
+        // Sync download button with current track
+        audio.addEventListener("loadeddata", () => {
+          document.getElementById("downloadBtn").href = audioSource.src;
+        });
+        const progressBar = document.getElementById("progressBar");
+        const currentTimeEl = document.getElementById("currentTime");
+        const durationTimeEl = document.getElementById("durationTime");
+
+        // Format seconds as M:SS
+        function formatTime(seconds) {
+          const min = Math.floor(seconds / 60);
+          const sec = Math.floor(seconds % 60).toString().padStart(2, '0');
+          return `${min}:${sec}`;
+        }
+
+        // Update progress bar and time display
+        audio.addEventListener("timeupdate", () => {
+          progressBar.value = Math.floor(audio.currentTime);
+          currentTimeEl.textContent = formatTime(audio.currentTime);
+        });
+
+        // Set duration once loaded
+        audio.addEventListener("loadedmetadata", () => {
+          progressBar.max = Math.floor(audio.duration);
+          durationTimeEl.textContent = formatTime(audio.duration);
+        });
+
+        // Allow user to seek through audio
+        progressBar.addEventListener("input", () => {
+          audio.currentTime = progressBar.value;
+        });
+
+      </script>
+</body>
+
+</html>
