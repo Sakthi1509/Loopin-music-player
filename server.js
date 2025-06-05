@@ -11,7 +11,7 @@ app.use(cors());
 app.use(bodyParser.json());
 
 // Serve all static files in the public directory
-app.use(express.static(path.join(__dirname, "otp-auth-app")));
+app.use(express.static(path.join(__dirname)));
 
 const accountSid = "ACdbafadf7b58094ddb1a86b47e140791b";
 const authToken = "7b66dd83a3e8d95ebd1c32a61f15fa6d";
@@ -61,7 +61,7 @@ app.post("/verify-otp", (req, res) => {
 
 // ✅ Serve index.html as default route
 app.get("/", (req, res) => {
-  res.sendFile(path.join(__dirname,"otp-auth-app","index.html"));
+  res.sendFile(path.join(__dirname,"index.html"));
 });
 
 // ✅ Start server
