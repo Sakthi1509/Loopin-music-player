@@ -39,6 +39,13 @@
       border-radius: 8px;
       margin-bottom: 10px;
     }
+    
+    @media (max-width: 768px) {
+  .card-row {
+    grid-template-columns: repeat(5, 1fr);
+    gap: 40px;
+  }
+}
   </style>
 </head>
 
@@ -47,16 +54,17 @@
     <div class="logo">
       <img src="1748801346365.png" alt="Loopin Logo" class="logo-img" />
     </div>
-    <div class="search-container">
+     <div class="search-container">
       <input type="text" placeholder="Search songs..." class="search-bar" autocomplete="off" />
       <div class="search-dropdown"></div>
     </div>
+
   </header>
 
   <section class="trending">
     <div class="section-header">
       <h2>Loading Songs...</h2>
-      <a href="home.html" class="show-all-btn">← Back</a>
+      <a href="about.html" class="show-all-btn">← Back</a>
     </div>
     <div class="card-row"></div>
   </section>
@@ -109,6 +117,78 @@
           cardRow.innerHTML = "<p>Error loading songs. Try again later.</p>";
         });
     });
-  </script>
+
+    
+
+
+
+
+
+// Search logic
+        const API_URL = `https://api.jamendo.com/v3.0/tracks/?client_id=${CLIENT_ID}&format=json&limit=20&fuzzytags=pop&include=musicinfo+stats`;
+
+        const searchBar = document.querySelector(".search-bar");
+        const searchDropdown = document.querySelector(".search-dropdown");
+        let searchTimeout;
+
+        searchBar.addEventListener("input", () => {
+          const query = searchBar.value.trim();
+          if (query.length < 2) {
+            searchDropdown.style.display = "none";
+            return;
+          }
+
+          clearTimeout(searchTimeout);
+          searchTimeout = setTimeout(() => {
+            fetchSearchResults(query);
+          }, 300);
+        });
+
+        function fetchSearchResults(query) {
+          const searchUrl = `https://api.jamendo.com/v3.0/tracks/?client_id=${CLIENT_ID}&format=json&limit=5&name=${encodeURIComponent(query)}&include=musicinfo+stats`;
+
+          fetch(searchUrl)
+            .then(res => res.json())
+            .then(data => {
+              if (!data.results.length) {
+                searchDropdown.style.display = "none";
+                return;
+              }
+
+              searchDropdown.innerHTML = "";
+              data.results.forEach(track => {
+                const item = document.createElement("div");
+                item.className = "item";
+                item.innerHTML = `
+  <div style="display: flex; align-items: center; gap: 10px;">
+    <img src="${track.album_image}" alt="${track.name}" width="40" height="40" />
+    <div>
+      <strong>${track.name}</strong><br>
+      <small>${track.artist_name}</small>
+    </div>
+  </div>
+`;
+
+                item.addEventListener("click", () => {
+                  ; // no index from search, it will auto find
+                  searchDropdown.style.display = "none";
+                  searchBar.value = "";
+                  localStorage.setItem("selectedTrack", JSON.stringify(track));
+                  window.location.href = "about.html";
+                });
+                searchDropdown.appendChild(item);
+              });
+              searchDropdown.style.display = "block";
+            });
+        }
+
+        document.addEventListener("click", (e) => {
+          if (!searchDropdown.contains(e.target) && e.target !== searchBar) {
+            searchDropdown.style.display = "none";
+          }
+        });
+
+  </script> 
+
 </body>
 </html>
