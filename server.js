@@ -13,9 +13,9 @@ app.use(bodyParser.json());
 // Serve all static files in the public directory
 app.use(express.static(path.join(__dirname)));
 
-const accountSid = "ACdbafadf7b58094ddb1a86b47e140791b";
-const authToken = "7b66dd83a3e8d95ebd1c32a61f15fa6d";
-const verifyServiceSid = "VAabe986175cea48346042662267a3a5f8";
+const accountSid = "";
+const authToken = "";
+const verifyServiceSid = "";
 
 const client = twilio(accountSid, authToken);
 
