@@ -1,0 +1,13 @@
+{
+  "expo": {
+    "name": "MusicPlayerApp",
+    "slug": "MusicPlayerApp",
+    "version": "1.0.0",
+    "orientation": "portrait","platforms": ["android","web"],
+    "icon": "./assets/1748801346365.png",
+    "userInterfaceStyle": "light",
+    "android": {
+      "package": "com.yourcompany.musicplayerapp"
+    }
+  }
+}
