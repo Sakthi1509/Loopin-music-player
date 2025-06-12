@@ -1,0 +1,800 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <title>TNEB Analyzer</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-color: #6a11cb;
+            --secondary-color: #2575fc;
+            --accent-color: #ff9a00;
+            --light-color: rgba(255, 255, 255, 0.9);
+            --dark-color: #2c3e50;
+        }
+
+        body {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            min-height: 100vh;
+            color: white;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            padding-bottom: 70px; /* Space for footer */
+        }
+
+        .card {
+            background-color: rgba(255, 255, 255, 0.1);
+            border: none;
+            border-radius: 1rem;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.2);
+            transition: all 0.3s ease;
+            color: white;
+            margin-bottom: 15px;
+            padding: 50%;
+        }
+
+        .form-control,
+        .btn {
+            border-radius: 0.7rem;
+            transition: all 0.3s ease;
+        }
+
+        .form-control:focus {
+            box-shadow: 0 0 0 0.25rem rgba(106, 17, 203, 0.25);
+            border-color: var(--primary-color);
+        }
+
+        .btn-primary {
+            background-color: var(--primary-color);
+            border-color: var(--primary-color);
+        }
+
+        .btn-warning {
+            background-color: var(--accent-color);
+            border-color: var(--accent-color);
+            color: var(--dark-color);
+            font-weight: bold;
+        }
+
+        .result-box {
+            color: white;
+            background-color: rgba(0, 0, 0, 0.3);
+            padding: 1.5rem;
+            border-radius: 1rem;
+            margin-top: 1rem;
+            backdrop-filter: blur(5px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .logo {
+            font-weight: bold;
+            font-size: 1.8rem;
+            color: #fff;
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        .slab-item {
+            border-left: 3px solid var(--accent-color);
+            padding-left: 0.8rem;
+            margin-bottom: 0.8rem;
+            transition: all 0.3s ease;
+            color: #fff;
+        }
+
+        .slab-item:hover {
+            background-color: rgba(255, 255, 255, 0.05);
+            transform: translateX(5px);
+        }
+
+        .device-item {
+            transition: all 0.3s ease;
+            border-radius: 0.7rem !important;
+        }
+
+        .device-item:hover {
+            background-color: rgba(255, 255, 255, 0.15) !important;
+            transform: translateX(5px);
+        }
+
+        .consumption-meter {
+            height: 10px;
+            border-radius: 5px;
+            background: linear-gradient(90deg, #4CAF50, #FFC107, #F44336);
+            margin-top: 5px;
+            overflow: hidden;
+        }
+
+        .meter-fill {
+            height: 100%;
+            background-color: var(--light-color);
+            border-radius: 5px;
+            transition: width 1s ease-out;
+        }
+
+        .power-icon {
+            font-size: 1.2rem;
+            margin-right: 8px;
+            color: var(--accent-color);
+        }
+
+        .energy-saving-tip {
+            background-color: rgba(255, 154, 0, 0.2);
+            border-left: 4px solid var(--accent-color);
+            padding: 10px;
+            border-radius: 0 8px 8px 0;
+            margin: 10px 0;
+        }
+
+        .chart-container {
+            position: relative;
+            align-items: center;
+            height: 200px;
+            margin: 20px 0;
+        }
+
+        /* Mobile Navigation Footer */
+        .mobile-footer {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(10px);
+            z-index: 1000;
+            padding: 10px 0;
+            box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        .nav-tabs {
+            display: flex;
+            justify-content: space-around;
+            border: none;
+        }
+
+        .nav-item {
+            flex: 1;
+            text-align: center;
+        }
+
+        .nav-link {
+            color: rgba(255, 255, 255, 0.7);
+            border: none;
+            padding: 10px 5px;
+            font-size: 0.8rem;
+            border-radius: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .nav-link.active {
+            color: white;
+            background: transparent;
+            border-bottom: 2px solid var(--accent-color);
+        }
+
+        .nav-link i {
+            font-size: 1.2rem;
+            margin-bottom: 5px;
+        }
+
+        /* Section management */
+        .app-section {
+            display: none;
+            
+        }
+
+        .app-section.active {
+            display: block;
+            animation: fadeIn 0.5s ease;
+            
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 576px) {
+            .container {
+                padding: 15px;
+            }
+            
+            .logo {
+                font-size: 1.5rem;
+            }
+            
+            .card {
+                padding: 5px;
+                
+            }
+            
+            .result-box {
+                padding: 15px;
+            }
+        }
+        
+    </style>
+</head>
+
+<body>
+    <div class="container py-3 animate__animated animate__fadeIn">
+        <div class="text-center mb-3">
+            <div class="logo mb-2">⚡ TNEB Analyzer</div>
+            <p class="text-light">Smart electricity bill estimation</p>
+            <div class="consumption-meter mb-3">
+                <div class="meter-fill" id="consumptionMeter" style="width: 0%"></div>
+            </div>
+        </div>
+
+        <!-- Add Device Section -->
+        <div id="addDeviceSection" class="app-section active ">
+            <div class="card p-3">
+                <form id="deviceForm" >
+                    <div class="mb-3">
+                        <label class="form-label"><i class="fas fa-plug power-icon"></i>Device Name</label>
+                        <input type="text" class="form-control" id="deviceName" placeholder="e.g. Air Conditioner" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label"><i class="fas fa-bolt power-icon"></i>Power (Watts)</label>
+                        <input type="number" class="form-control" id="wattage" placeholder="e.g. 1500" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label"><i class="far fa-clock power-icon"></i>Usage (Hours/Day)</label>
+                        <input type="number" class="form-control" id="hoursPerDay" placeholder="e.g. 8" min="0" max="24"
+                            required>
+                    </div>
+                    <div class="d-grid gap-2">
+                        <button type="submit" class="btn btn-primary btn-lg">
+                            <i class="fas fa-plus-circle"></i> Add Device
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- Your Devices Section -->
+        <div id="yourDevicesSection" class="app-section">
+            <div class="mt-3">
+                <h5 class="text-white mb-3"><i class="fas fa-list"></i> Your Devices</h5>
+                <div class="alert alert-info d-flex align-items-center d-none" id="emptyState">
+                    <i class="fas fa-info-circle me-2"></i>
+                    <div>No devices added yet. Start by adding your first device.</div>
+                </div>
+                <ul class="list-group" id="deviceList"></ul>
+            </div>
+
+            <div class="d-grid gap-2 mt-3">
+                <button class="btn btn-warning btn-lg" onclick="calculateBill()">
+                    <i class="fas fa-calculator"></i> Calculate Bill
+                </button>
+            </div>
+        </div>
+
+        <!-- Results Section -->
+        <div id="resultsSection" class="app-section">
+            <div class="result-box animate__animated animate__fadeInUp" id="resultBox">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <h5 class="mb-0"><i class="fas fa-chart-pie"></i> Consumption Analysis</h5>
+                    <span class="badge bg-success" id="consumptionLevel">Low</span>
+                </div>
+
+                <div class="chart-container">
+                   <hr> <canvas id="consumptionChart"></canvas>
+                </div><hr>
+
+                <div class="row mt-2">
+                    <div class="col-14">
+                        <div class="card bg-transparent border-light mb-3">
+                            <div class="card-body">
+                                <h6 class="card-title"><i class="fas fa-bolt"></i> Energy Usage</h6>
+                                <p class="mb-1">🔋 Daily: <span id="dailyConsumption">0</span> kWh</p>
+                                <p class="mb-1">📆 Monthly: <span id="monthlyConsumption">0</span> kWh</p>
+                                <p>📅 Yearly: <span id="yearlyConsumption">0</span> kWh</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-14">
+                       <div class="card bg-transparent border-light mb-3">
+                            <div class="card-body">
+                                <h6 class="card-title"><i class="fas fa-rupee-sign"></i> Cost Estimate</h6>
+                                <p class="mb-1">⚡ Total Units: <span id="totalUnits">0</span> units/month</p>
+                                <p class="mb-1">📆 Monthly: ₹<span id="monthlyBill">0.00</span></p>
+                                <p class="mb-1">📅 Yearly: ₹<span id="yearlyBill">0.00</span></p>
+                                <p>💡 Per Day: ₹<span id="dailyBill">0.00</span></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+<hr>
+                <div class="mt-3" id="slabBreakdown"></div>
+
+                <div class="energy-saving-tip mt-4 animate__animated animate__fadeIn" id="energyTip">
+                    <h6><i class="fas fa-lightbulb"></i> Energy Saving Tip</h6>
+                    <p id="tipContent">Loading energy saving tips...</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Mobile Navigation Footer -->
+    <nav class="mobile-footer">
+        <ul class="nav nav-tabs">
+            <li class="nav-item">
+                <a class="nav-link active" href="#" onclick="showSection('addDeviceSection')">
+                    <i class="fas fa-plus-circle"></i>
+                    <span>Add Device</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="#" onclick="showSection('yourDevicesSection')">
+                    <i class="fas fa-list"></i>
+                    <span>Your Devices</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="#" onclick="showSection('resultsSection')">
+                    <i class="fas fa-chart-bar"></i>
+                    <span>Results</span>
+                </a>
+            </li>
+        </ul>
+    </nav>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        let deviceList = [];
+        let consumptionChart = null;
+        const deviceForm = document.getElementById('deviceForm');
+        const deviceListElement = document.getElementById('deviceList');
+        const emptyStateElement = document.getElementById('emptyState');
+
+        // TNEB Slab Rates (2023)
+        const slabs = [
+            { limit: 100, rate: 0 },       // First 100 units free
+            { limit: 100, rate: 2.25 },    // Next 100 units
+            { limit: 200, rate: 4.5 },     // Next 200 units
+            { limit: 100, rate: 6.0 },     // Next 100 units
+            { limit: 100, rate: 8.0 },     // Next 100 units
+            { limit: 400, rate: 9.0 },     // Next 400 units
+            { rate: 10.0 }                 // All remaining units
+        ];
+
+        // Common devices database with icons
+        const commonDevices = [
+            { name: "Ceiling Fan", wattage: 60, icon: "fa-fan" },
+            { name: "LED Bulb", wattage: 9, icon: "fa-lightbulb" },
+            { name: "Air Conditioner", wattage: 1500, icon: "fa-snowflake" },
+            { name: "Refrigerator", wattage: 200, icon: "fa-refrigerator" },
+            { name: "Washing Machine", wattage: 500, icon: "fa-soap" },
+            { name: "Iron Box", wattage: 1000, icon: "fa-iron" },
+            { name: "Television", wattage: 120, icon: "fa-tv" },
+            { name: "Laptop", wattage: 50, icon: "fa-laptop" },
+            { name: "Water Heater", wattage: 2000, icon: "fa-water" },
+            { name: "Microwave", wattage: 800, icon: "fa-utensils" }
+        ];
+
+        // Energy saving tips
+        const energyTips = [
+            "Use ceiling fans instead of AC when possible - can save up to 90% energy!",
+            "Switch to LED bulbs - they use 75% less energy than incandescent bulbs.",
+            "Set your AC temperature to 24°C - each degree lower increases consumption by 3-4%.",
+            "Use your washing machine with full loads - reduces number of cycles needed.",
+            "Unplug devices when not in use - standby power can account for 10% of your bill.",
+            "Clean AC filters monthly - dirty filters make your AC work harder.",
+            "Use natural light during daytime - open curtains and turn off unnecessary lights.",
+            "Prefer microwave over oven for small meals - uses 50-80% less energy.",
+            "Install solar water heater - can reduce water heating costs by 80%."
+        ];
+
+        let editingIndex = -1;
+
+        // Load devices from local storage on page load
+        window.addEventListener('DOMContentLoaded', function() {
+            loadDevices();
+            populateCommonDevices();
+            showRandomEnergyTip();
+            updateResults(); // Auto-calculate results if devices exist
+
+            // Initialize consumption meter animation
+            setTimeout(() => {
+                document.getElementById('consumptionMeter').style.width = '30%';
+            }, 500);
+        });
+
+        // Navigation functions
+        function showSection(sectionId) {
+            // Update active nav link
+            document.querySelectorAll('.nav-link').forEach(link => {
+                link.classList.remove('active');
+            });
+            event.target.classList.add('active');
+
+            // Fix for typo in yourDevicesSection ID
+            if (sectionId === 'yourDevicesSection') {
+                sectionId = 'yourDevicesSection';
+            } else if (sectionId === 'yourDevicesSection') {
+                sectionId = 'yourDevicesSection';
+            }
+
+            // Show the selected section
+            document.querySelectorAll('.app-section').forEach(section => {
+                section.classList.remove('active');
+            });
+            document.getElementById(sectionId).classList.add('active');
+
+            // Scroll to top
+            window.scrollTo(0, 0);
+        }
+
+        function loadDevices() {
+            const saved = localStorage.getItem('tnebDevices');
+            if (saved) {
+                deviceList = JSON.parse(saved);
+                renderDeviceList();
+            }
+            toggleEmptyState();
+        }
+
+        function saveDevices() {
+            localStorage.setItem('tnebDevices', JSON.stringify(deviceList));
+            updateResults(); // Auto-update results when devices change
+        }
+
+        function toggleEmptyState() {
+            if (deviceList.length === 0) {
+                emptyStateElement.classList.remove('d-none');
+                document.getElementById('resultBox').classList.add('d-none');
+            } else {
+                emptyStateElement.classList.add('d-none');
+            }
+        }
+
+        function populateCommonDevices() {
+            const deviceNameInput = document.getElementById('deviceName');
+            const datalist = document.createElement('datalist');
+            datalist.id = 'commonDevices';
+
+            commonDevices.forEach(device => {
+                const option = document.createElement('option');
+                option.value = device.name;
+                option.setAttribute('data-wattage', device.wattage);
+                datalist.appendChild(option);
+            });
+
+            document.body.appendChild(datalist);
+            deviceNameInput.setAttribute('list', 'commonDevices');
+
+            // Auto-fill wattage when selecting from common devices
+            deviceNameInput.addEventListener('change', function() {
+                const selected = commonDevices.find(d => d.name === this.value);
+                if (selected) {
+                    document.getElementById('wattage').value = selected.wattage;
+                }
+            });
+        }
+
+        function showRandomEnergyTip() {
+            const randomTip = energyTips[Math.floor(Math.random() * energyTips.length)];
+            document.getElementById('tipContent').textContent = randomTip;
+        }
+
+        deviceForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            const name = document.getElementById('deviceName').value.trim();
+            const watt = parseFloat(document.getElementById('wattage').value);
+            const hours = parseFloat(document.getElementById('hoursPerDay').value);
+
+            if (!name || isNaN(watt) || watt <= 0 || isNaN(hours) || hours <= 0 || hours > 24) {
+                showAlert('Please enter valid values:\n- Device name required\n- Wattage must be positive\n- Hours must be between 0-24', 'danger');
+                return;
+            }
+
+            if (editingIndex === -1) {
+                deviceList.push({ name, watt, hours });
+                showAlert(`Added ${name} successfully!`, 'success');
+            } else {
+                deviceList[editingIndex] = { name, watt, hours };
+                editingIndex = -1;
+                showAlert(`Updated ${name} successfully!`, 'info');
+            }
+
+            renderDeviceList();
+            saveDevices();
+            deviceForm.reset();
+            animateAddDevice();
+            
+            // Switch to devices list after adding
+            showSection('yourDevicesSection');
+        });
+
+        function showAlert(message, type) {
+            const alertBox = document.createElement('div');
+            alertBox.className = `alert alert-${type} alert-dismissible fade show position-fixed top-0 start-50 translate-middle-x mt-3`;
+            alertBox.style.zIndex = '1000';
+            alertBox.innerHTML = `
+                ${message}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            `;
+
+            document.body.appendChild(alertBox);
+
+            // Remove alert after 3 seconds
+            setTimeout(() => {
+                alertBox.classList.remove('show');
+                setTimeout(() => alertBox.remove(), 150);
+            }, 3000);
+        }
+
+        function animateAddDevice() {
+            const deviceList = document.getElementById('deviceList');
+            if (deviceList.children.length > 0) {
+                const lastItem = deviceList.lastChild;
+                lastItem.classList.add('animate__animated', 'animate__fadeInRight');
+                setTimeout(() => {
+                    lastItem.classList.remove('animate__animated', 'animate__fadeInRight');
+                }, 1000);
+            }
+        }
+
+        function renderDeviceList() {
+            deviceListElement.innerHTML = "";
+            toggleEmptyState();
+
+            if (deviceList.length === 0) return;
+
+            deviceList.forEach((device, index) => {
+                const li = document.createElement('li');
+                li.className = "list-group-item device-item bg-transparent text-white border-light d-flex justify-content-between align-items-center flex-wrap mb-2";
+
+                // Find matching icon from common devices
+                const matchedDevice = commonDevices.find(d => d.name.toLowerCase().includes(device.name.toLowerCase()) ||
+                    device.name.toLowerCase().includes(d.name.toLowerCase()));
+                const deviceIcon = matchedDevice ? matchedDevice.icon : 'fa-plug';
+
+                li.innerHTML = `
+                    <div class="d-flex align-items-center">
+                        <i class="fas ${deviceIcon} me-2"></i>
+                        <div>
+                            <strong>${device.name}</strong><br>
+                            <small>${device.watt}W × ${device.hours}hr/day</small>
+                        </div>
+                    </div>
+                    <div class="btn-group mt-2 mt-md-0">
+                        <button class="btn btn-sm btn-outline-light" onclick="editDevice(${index})">
+                            <i class="fas fa-edit"></i>
+                        </button>
+                        <button class="btn btn-sm btn-outline-danger" onclick="deleteDevice(${index})">
+                            <i class="fas fa-trash-alt"></i>
+                        </button>
+                    </div>
+                `;
+                deviceListElement.appendChild(li);
+            });
+        }
+
+        function editDevice(index) {
+            const device = deviceList[index];
+            document.getElementById('deviceName').value = device.name;
+            document.getElementById('wattage').value = device.watt;
+            document.getElementById('hoursPerDay').value = device.hours;
+            editingIndex = index;
+            document.getElementById('deviceName').focus();
+
+            // Add animation to highlight the edited device
+            const deviceItems = document.querySelectorAll('#deviceList li');
+            deviceItems[index].classList.add('animate__animated', 'animate__pulse');
+            setTimeout(() => {
+                deviceItems[index].classList.remove('animate__animated', 'animate__pulse');
+            }, 1000);
+            
+            // Switch to add device section
+            showSection('addDeviceSection');
+        }
+
+        function deleteDevice(index) {
+            const deviceName = deviceList[index].name;
+            if (confirm(`Are you sure you want to remove ${deviceName}?`)) {
+                // Add delete animation
+                const deviceItem = document.querySelectorAll('#deviceList li')[index];
+                deviceItem.classList.add('animate__animated', 'animate__fadeOutLeft');
+
+                setTimeout(() => {
+                    deviceList.splice(index, 1);
+                    renderDeviceList();
+                    saveDevices();
+                    showAlert(`Removed ${deviceName}`, 'warning');
+                }, 500);
+            }
+        }
+
+        function calculateBillAmount(units) {
+            let remaining = units;
+            let bill = 0;
+            let breakdown = [];
+
+            for (const slab of slabs) {
+                if (remaining <= 0) break;
+
+                if (slab.limit) {
+                    const chargeable = Math.min(remaining, slab.limit);
+                    bill += chargeable * slab.rate;
+                    breakdown.push({
+                        units: chargeable,
+                        rate: slab.rate,
+                        cost: chargeable * slab.rate
+                    });
+                    remaining -= chargeable;
+                } else {
+                    // Last slab with no limit
+                    bill += remaining * slab.rate;
+                    breakdown.push({
+                        units: remaining,
+                        rate: slab.rate,
+                        cost: remaining * slab.rate
+                    });
+                    remaining = 0;
+                }
+            }
+
+            return { total: bill, breakdown };
+        }
+
+        function updateConsumptionMeter(units) {
+            const meter = document.getElementById('consumptionMeter');
+            let percentage = 0;
+
+            if (units <= 100) {
+                percentage = (units / 100) * 30; // First 30% for 0-100 units
+            } else if (units <= 500) {
+                percentage = 30 + ((units - 100) / 400) * 40; // Next 40% for 100-500 units
+            } else {
+                percentage = 70 + ((units - 500) / 500) * 30; // Remaining 30% for 500+ units
+            }
+
+            meter.style.width = `${Math.min(percentage, 100)}%`;
+
+            // Update color based on consumption
+            if (units <= 100) {
+                meter.style.backgroundColor = '#4CAF50'; // Green
+                document.getElementById('consumptionLevel').className = 'badge bg-success';
+                document.getElementById('consumptionLevel').textContent = 'Low';
+            } else if (units <= 300) {
+                meter.style.backgroundColor = '#FFC107'; // Yellow
+                document.getElementById('consumptionLevel').className = 'badge bg-warning text-dark';
+                document.getElementById('consumptionLevel').textContent = 'Moderate';
+            } else {
+                meter.style.backgroundColor = '#F44336'; // Red
+                document.getElementById('consumptionLevel').className = 'badge bg-danger';
+                document.getElementById('consumptionLevel').textContent = 'High';
+            }
+        }
+
+        function createPieChart(deviceBreakdown) {
+            const ctx = document.getElementById('consumptionChart').getContext('2d');
+
+            if (consumptionChart) {
+                consumptionChart.destroy();
+            }
+
+            const labels = deviceBreakdown.map(device => device.name);
+            const data = deviceBreakdown.map(device => device.monthlyKWh);
+            const backgroundColors = [
+                '#FF6384', '#36A2EB', '#FFCE56', '#4BC0C0',
+                '#9966FF', '#FF9F40', '#8AC24A', '#607D8B'
+            ];
+
+            consumptionChart = new Chart(ctx, {
+                type: 'pie',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        data: data,
+                        backgroundColor: backgroundColors,
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: {
+                            position: 'right',
+                            labels: {
+                                color: 'white'
+                            }
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    const label = context.label || '';
+                                    const value = context.raw || 0;
+                                    const percentage = Math.round((value / context.dataset.data.reduce((a, b) => a + b, 0)) * 100);
+                                    return `${label}: ${value.toFixed(1)} kWh (${percentage}%)`;
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        function updateResults() {
+            if (deviceList.length === 0) {
+                document.getElementById('resultBox').classList.add('d-none');
+                return;
+            }
+
+            let totalDailyKWh = 0;
+            let deviceBreakdown = [];
+
+            deviceList.forEach(device => {
+                const dailyKWh = (device.watt * device.hours) / 1000;
+                totalDailyKWh += dailyKWh;
+                deviceBreakdown.push({
+                    name: device.name,
+                    dailyKWh: dailyKWh,
+                    monthlyKWh: dailyKWh * 30,
+                    yearlyKWh: dailyKWh * 365
+                });
+            });
+
+            const monthlyKWh = totalDailyKWh * 30;
+            const yearlyKWh = totalDailyKWh * 365;
+            const units = Math.round(monthlyKWh);
+            const { total: bill, breakdown } = calculateBillAmount(units);
+
+            // Update UI
+            document.getElementById('totalUnits').innerText = units;
+            document.getElementById('dailyConsumption').innerText = totalDailyKWh.toFixed(2);
+            document.getElementById('monthlyConsumption').innerText = monthlyKWh.toFixed(2);
+            document.getElementById('yearlyConsumption').innerText = yearlyKWh.toFixed(2);
+            document.getElementById('monthlyBill').innerText = bill.toFixed(2);
+            document.getElementById('yearlyBill').innerText = (bill * 12).toFixed(2);
+            document.getElementById('dailyBill').innerText = (bill / 30).toFixed(2);
+
+            // Update consumption meter
+            updateConsumptionMeter(units);
+
+            // Create pie chart
+            createPieChart(deviceBreakdown);
+
+            // Display slab breakdown
+            const breakdownElement = document.getElementById('slabBreakdown');
+            breakdownElement.innerHTML = '<h6><i class="fas fa-receipt"></i> Billing Breakdown</h6>';
+
+            breakdown.forEach((item, index) => {
+                if (item.cost > 0) {
+                    const itemElement = document.createElement('div');
+                    itemElement.className = 'slab-item';
+                    itemElement.innerHTML = `
+                        <strong>${item.units} units</strong> × ₹${item.rate}/unit = <strong>₹${item.cost.toFixed(2)}</strong>
+                    `;
+                    breakdownElement.appendChild(itemElement);
+                }
+            });
+
+            // Show random energy tip
+            showRandomEnergyTip();
+
+            // Show result box
+            document.getElementById('resultBox').classList.remove('d-none');
+        }
+
+        function calculateBill() {
+            if (deviceList.length === 0) {
+                showAlert('Please add at least one device to calculate bill', 'danger');
+                return;
+            }
+
+            updateResults();
+            showSection('resultsSection');
+        }
+    </script>
+</body>
+</html>
